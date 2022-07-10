@@ -1,33 +1,33 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Get, NotFoundException, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { CreateUser } from 'src/dtos/createUser.dto';
 import { JwtGuard } from 'src/guards/jwt.guard';
-import { LocalAuthGuard } from 'src/guards/local-auth.guard';
-import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
    constructor(private readonly usersService: UsersService) { }
 
-   @Post()
-   async create(@Body(new ValidationPipe()) userDto: CreateUser) {
-      return this.usersService.create(userDto)
-   }
+   // @Post()
+   // async create(@Body(new ValidationPipe()) userDto: CreateUser) {
+   //    return this.usersService.create(userDto)
+   // }
+
+   // @UseGuards(AuthGuard('local'))
+   // @UseGuards(LocalAuthGuard)
+   // @Post('/login')
+   // async login(@Req() req: Request) {
+   //    return this.usersService.login(req.user);
+   // }
+
+   // @Put('/role/:id')
+   // async update(@Body(new ValidationPipe()) roleDto: UpdateRole, @Param('id') id: string) {
+   //    return this.usersService.updateRole(id, roleDto)
+   // }
 
    @UseGuards(JwtGuard)
    @Get()
    async findAll(@Req() req: Request) {
-      console.log(req.user)
       return this.usersService.findAll()
-   }
-
-   // @UseGuards(AuthGuard('local'))
-   @UseGuards(LocalAuthGuard)
-   @Post('/login')
-   async login(@Req() req: Request) {
-      return this.usersService.login(req.user);
    }
 
    @Get(':id')
@@ -38,3 +38,4 @@ export class UsersController {
       return user;
    }
 }
+
